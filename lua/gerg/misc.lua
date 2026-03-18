@@ -66,7 +66,6 @@ vim.g.moonflyTransparent = true
 vim.g.moonflyUndercurls = false
 vim.g.moonflyUnderlineMatchParen = true
 vim.g.moonflyVirtualTextColor = true
-vim.cmd.colorscheme("moonfly")
 
 -- stop hiding double quotes in json files
 vim.g.indentLine_setConceal = 0

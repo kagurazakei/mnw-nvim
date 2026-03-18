@@ -1,92 +1,97 @@
 return {
-	{ "lspkind.nvim" },
-	{
-		"blink.cmp",
-		event = "DeferredUIEnter",
-		before = function()
-			LZN.trigger_load("lazydev.nvim")
-			LZN.trigger_load("lspkind.nvim")
-		end,
-		after = function()
-			require("blink.cmp").setup({
-				signature = { enabled = true },
-				completion = {
-					accept = {
-						auto_brackets = {
-							enabled = true,
+	"blink.cmp",
+	event = "InsertEnter",
+	after = function()
+		require("blink-cmp").setup({
+			keymap = {
+				preset = "enter", -- before you pull out your hair
+				["<C-n>"] = { "select_prev", "fallback" },
+				["<C-p>"] = { "select_next", "fallback" },
+				["<Tab>"] = { "select_next", "fallback" },
+				["<S-Tab>"] = { "select_prev", "fallback" },
+				["<CR>"] = { "accept", "fallback" },
+			},
+			appearance = { nerd_font_variant = "mono" },
+			completion = {
+				accept = {
+					auto_brackets = {
+						enabled = true,
+					},
+				},
+				list = {
+					selection = { preselect = true, auto_insert = true },
+					max_items = 10,
+				},
+				cmdline = {
+					enabled = true,
+					keymap = {
+						preset = "inherit",
+						["<Tab>"] = { "show_and_insert_or_accept_single", "select_next" },
+						["<S-Tab>"] = { "show_and_insert_or_accept_single", "select_prev" },
+						["<C-space>"] = { "show", "fallback" },
+						["<CR>"] = { "accept", "fallback" },
+						["<C-n>"] = { "select_next", "fallback" },
+						["<C-p>"] = { "select_prev", "fallback" },
+						["<Right>"] = { "select_next", "fallback" },
+						["<Left>"] = { "select_prev", "fallback" },
+
+						["<C-y>"] = { "select_and_accept", "fallback" },
+						["<C-e>"] = { "cancel", "fallback" },
+					},
+					completion = {
+						menu = { auto_show = true },
+						list = {
+							selection = { preselect = false, auto_insert = true },
 						},
 					},
-					menu = {
-						auto_show = function(ctx)
-							return ctx.mode ~= "cmdline"
-						end,
-						draw = {
-							components = {
-								kind_icon = {
-									text = function(ctx)
-										local icon = ctx.kind_icon
-										if vim.tbl_contains({ "Path" }, ctx.source_name) then
-											local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
-											if dev_icon then
-												icon = dev_icon
-											end
-										else
-											icon = require("lspkind").symbol_map[ctx.kind] or ""
+				},
+				menu = {
+					border = "single",
+					auto_show = true,
+					draw = {
+						components = {
+							kind_icon = {
+								text = function(ctx)
+									local icon = ctx.kind_icon
+									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+										local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+										if dev_icon then
+											icon = dev_icon
 										end
-										return icon .. ctx.icon_gap
-									end,
+									else
+										icon = require("lspkind").symbolic(ctx.kind, { mode = "symbol" })
+									end
 
-									-- Optionally, use the highlight groups from nvim-web-devicons
-									-- You can also add the same function for `kind.highlight` if you want to
-									-- keep the highlight groups in sync with the icons.
-									highlight = function(ctx)
-										local hl = ctx.kind_hl
-										if vim.tbl_contains({ "Path" }, ctx.source_name) then
-											local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-											if dev_icon then
-												hl = dev_hl
-											end
+									return icon .. ctx.icon_gap
+								end,
+
+								-- Optionally, use the highlight groups from nvim-web-devicons
+								-- You can also add the same function for `kind.highlight` if you want to
+								-- keep the highlight groups in sync with the icons.
+								highlight = function(ctx)
+									local hl = ctx.kind_hl
+									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+										local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+										if dev_icon then
+											hl = dev_hl
 										end
-										return hl
-									end,
-								},
+									end
+									return hl
+								end,
 							},
-							treesitter = { "lsp" },
 						},
-					},
-					ghost_text = { enabled = true },
-					list = {
-						selection = {
-							preselect = true,
-							auto_insert = true,
-						},
-					},
-					documentation = {
-						auto_show = true,
-						auto_show_delay_ms = 500,
 					},
 				},
-				keymap = {
-					preset = "enter",
+				ghost_text = { enabled = true },
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 200,
 
-					["<C-n>"] = { "select_prev", "fallback" },
-					["<C-p>"] = { "select_next", "fallback" },
-					["<Tab>"] = { "select_next", "fallback" },
-					["<S-Tab>"] = { "select_prev", "fallback" },
-					["<CR>"] = { "accept", "fallback" },
+					window = { border = "single" },
 				},
-				sources = {
-					default = { "lazydev", "lsp", "buffer", "snippets", "path", "omni" },
-					providers = {
-						lazydev = {
-							name = "LazyDev",
-							module = "lazydev.integrations.blink",
-							score_offset = 100,
-						},
-					},
-				},
-				fuzzy = { implementation = "rust" },
-			})
-		end,
-	},
+			},
+			sources = { default = { "lsp", "path", "snippets", "buffer" } },
+			fuzzy = { implementation = "prefer_rust_with_warning" },
+		})
+	end,
 }

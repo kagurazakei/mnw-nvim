@@ -1,10 +1,10 @@
 { pkgs, fetchFromGitHub, ... }:
 
-pkgs.vimPlugins.blink-cmp.overrideAttrs {
+pkgs.vimPlugins.blink-cmp-nixpkgs-maintainers.overrideAttrs {
   src = fetchFromGitHub {
-    owner = "Saghen";
-    repo = "blink.cmp";
-    rev = "19c25fa5e95f1387f53b461a425ad2129ed1d681";
-    hash = "sha256-4RuzzT+4jF1N1Ks+qZtyvnZt3L0icEdUX++rpRcDrVQ=";
+    owner = "GaetanLepage";
+    repo = "blink-cmp-nixpkgs-maintainers";
+    rev = "b572f807ca3b4b6f87c791b0d5ceaa81dbb00d70";
+    hash = "sha256-ollZI9Bd3eAKvzS84oIzToVruYbCERKKhZpIR+cBxBE=";
   };
 }

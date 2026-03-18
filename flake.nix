@@ -30,12 +30,32 @@
       eachSystem = nixpkgs.lib.genAttrs (import systems);
     in
     {
+      #
+      # Linter and formatter, run with "nix fmt"
+      # You can use alejandra or nixpkgs-fmt instead of nixfmt if you wish
+      #
       formatter = eachSystem (
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
         in
-        import ./flake/formatter.nix { inherit pkgs; }
+        pkgs.writeShellApplication {
+          name = "format";
+          runtimeInputs = builtins.attrValues {
+            inherit (pkgs)
+              nixfmt
+              deadnix
+              statix
+              fd
+              stylua
+              ;
+          };
+          text = ''
+            fd "$@" -t f -e nix -x statix fix -- '{}'
+            fd "$@" -t f -e nix -X deadnix -e -- '{}' \; -X nixfmt '{}'
+            fd "$@" -t f -e lua -X stylua --indent-type Spaces --indent-width 2 '{}'
+          '';
+        }
       );
 
       devShells = eachSystem (
@@ -44,7 +64,17 @@
           pkgs = nixpkgs.legacyPackages.${system};
         in
         {
-          default = import ./flake/shell.nix { inherit pkgs; };
+          default = pkgs.mkShellNoCC {
+            packages = [
+              pkgs.npins
+              (pkgs.writeShellScriptBin "opt" ''
+                npins --lock-file opt.json "$@"
+              '')
+              (pkgs.writeShellScriptBin "start" ''
+                npins --lock-file start.json "$@"
+              '')
+            ];
+          };
         }
       );
 
@@ -53,14 +83,13 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
         in
-        import ./flake/package.nix {
-          inherit
-            pkgs
-            inputs
-            mnw
-            self
-            system
-            ;
+        {
+          default = self.packages.${system}.neovim;
+
+          dev = self.packages.${system}.default.devMode;
+          inherit (self.packages.${system}.default) configDir;
+
+          neovim = mnw.lib.wrap { inherit pkgs inputs; } ./config.nix;
         }
       );
     };

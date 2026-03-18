@@ -66,7 +66,7 @@ return {
 		},
 		after = function()
 			require("tokyonight").setup({
-				transparent = true,
+				transparent = false,
 				lualine_bold = true,
 				styles = { sidebars = "transparent", floats = "transparent" },
 				on_colors = function(colors)

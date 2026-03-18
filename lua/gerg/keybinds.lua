@@ -2,7 +2,6 @@ local map = vim.keymap.set
 local defaults = function(desc)
 	return { noremap = true, silent = true, desc = desc }
 end
-
 -- General maps
 map("n", "<leader>f", "+find/file")
 map("n", "<leader>e", "<cmd>Yazi<cr>", { silent = true, desc = "Yazi Current Directory" })
@@ -19,12 +18,14 @@ map({ "n", "v" }, "<leader>c", "+code")
 
 -- Tabs
 
+map("n", "<leader>/", "gcc", { silent = true, desc = "Comment Current Line" })
+map("v", "<leader>/", "gc", { silent = true, desc = "Comment Visual" })
 map("n", "<leader><b>l", "<cmd>blast<cr>", { silent = true, desc = "Last Tab" })
 map("n", "<leader><b>f", "<cmd>bfirst<cr>", { silent = true, desc = "First Tab" })
 map("n", "<leader><b>n", "<cmd>bnew<cr>", { silent = true, desc = "New Tab" })
-map("n", "<leader><tab>", "<cmd>bnext<cr>", { silent = true, desc = "Next Tab" })
+map("n", "<tab>", "<cmd>bnext<cr>", { silent = true, desc = "Next Tab" })
 map("n", "<leader><b>d", "<cmd>bclose<cr>", { silent = true, desc = "Close Tab" })
-map("n", "<leader><S-tab>", "<cmd>bprevious<cr>", { silent = true, desc = "Previous Tab" })
+map("n", "<S-tab>", "<cmd>bprevious<cr>", { silent = true, desc = "Previous Tab" })
 -- Windows
 map("n", "<leader>tw", "<C-W>p", { silent = true, desc = "Other Window" })
 map("n", "<leader>td", "<C-W>c", { silent = true, desc = "Delete Window" })
@@ -32,7 +33,6 @@ map("n", "<leader>t-", "<C-W>s", { silent = true, desc = "Split Window Below" })
 map("n", "<leader>t|", "<C-W>v", { silent = true, desc = "Split Window Right" })
 -- map("n", "<leader>-", "<C-W>s", {silent = true, desc = "Split Window Below"})
 map("n", "<leader>|", "<C-W>v", { silent = true, desc = "Split Window Right" })
-
 -- Save file
 map("n", "<leader>w", "<cmd>w<cr><esc>", { silent = true, desc = "Save file" })
 -- Quit/Session
@@ -45,6 +45,7 @@ map(
 	"function() lua require('persistence').load({ last = true })end",
 	{ silent = true, desc = "Restore Last Session" }
 )
+
 map(
 	"n",
 	"<leader>qd",
