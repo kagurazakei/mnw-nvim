@@ -20,11 +20,23 @@
 
   # Source lua config
   initLua = ''
-    require("gerg")
-    LZN = require("lz.n")
-    LZN.register_handler(require("handlers.which-key"))
-    LZN.load("lazy")
-    vim.cmd.colorscheme "tokyonight-night"
+        require("gerg")
+        LZN = require("lz.n")
+        LZN.register_handler(require("handlers.which-key"))
+        LZN.load("lazy")
+        vim.cmd.colorscheme "rose-pine-main"
+
+    vim.lsp.enable({
+    	"fish_lsp",
+    	"gleam",
+    	"lua_ls",
+    	"nil_ls",
+    	"basedpyright",
+    	"ts_ls",
+    	"marksman",
+    	"tinymist",
+    	"clangd",
+    })
   '';
 
   desktopEntry = false;
@@ -39,35 +51,35 @@
           fileset = fs.unions [
             ./lua
             ./after
+            ./snippets
           ];
         };
-      impure = "~/Projects/nvim-flake";
+      impure = "~/Projects/final-nvim";
     };
 
     startAttrs = inputs.mnw.lib.npinsToPluginsAttrs pkgs ./start.json;
-    opt = builtins.attrValues {
-      inherit (pkgs.vimPlugins)
-        catppuccin-nvim
-        rose-pine
-        ;
-    };
+
     start = builtins.attrValues {
       inherit (pkgs.vimPlugins)
         lz-n
         luvit-meta
         mini-align
-        nvim-autopairs
         nvim-surround
         mini-cursorword
         mini-comment
         cord-nvim
         snacks-nvim
         smart-open-nvim
+        vim-moonfly-colors
         sqlite-lua
         statuscol-nvim
         which-key-nvim
         better-escape-nvim
-        blink-cmp
+        rose-pine
+        catppuccin-nvim
+        luasnip
+        blink-cmp-nixpkgs-maintainers
+        colorful-menu-nvim
         ;
 
       treesitter =
@@ -82,9 +94,7 @@
         nts.withPlugins (_: nts.allGrammars ++ norgG);
     };
 
-    optAttrs =
-      #"blink.cmp" = inputs.self.packages.${pkgs.stdenv.system}.blink-cmp;
-      inputs.mnw.lib.npinsToPluginsAttrs pkgs ./opt.json;
+    optAttrs = inputs.mnw.lib.npinsToPluginsAttrs pkgs ./opt.json;
 
   };
 
@@ -96,11 +106,10 @@
       deadnix
       statix
       nil
-      wl-clipboard
-      imagemagick
+
       lua-language-server
       stylua
-      nixd
+
       #rustfmt
 
       ripgrep

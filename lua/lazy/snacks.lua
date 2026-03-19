@@ -25,14 +25,6 @@ return {
 				},
 				lazygit = {
 					enabled = true,
-					keys = {
-						{
-							icon = " ",
-							key = "gz",
-							desc = "Lazy Git",
-							action = ":lua Snacks.lazygit.open()",
-						},
-					},
 				},
 				statuscolumn = { enabled = true },
 				dashboard = {

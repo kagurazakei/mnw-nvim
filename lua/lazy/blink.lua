@@ -5,6 +5,8 @@ return {
 		require("blink-cmp").setup({
 			keymap = {
 				preset = "enter", -- before you pull out your hair
+				-- I have capslock + hjkl translated to the arrow keys
+				-- see keyd.nix for more info
 				["<C-n>"] = { "select_prev", "fallback" },
 				["<C-p>"] = { "select_next", "fallback" },
 				["<Tab>"] = { "select_next", "fallback" },
@@ -25,18 +27,7 @@ return {
 				cmdline = {
 					enabled = true,
 					keymap = {
-						preset = "inherit",
-						["<Tab>"] = { "show_and_insert_or_accept_single", "select_next" },
-						["<S-Tab>"] = { "show_and_insert_or_accept_single", "select_prev" },
-						["<C-space>"] = { "show", "fallback" },
-						["<CR>"] = { "accept", "fallback" },
-						["<C-n>"] = { "select_next", "fallback" },
-						["<C-p>"] = { "select_prev", "fallback" },
-						["<Right>"] = { "select_next", "fallback" },
-						["<Left>"] = { "select_prev", "fallback" },
-
-						["<C-y>"] = { "select_and_accept", "fallback" },
-						["<C-e>"] = { "cancel", "fallback" },
+						preset = "cmdline",
 					},
 					completion = {
 						menu = { auto_show = true },

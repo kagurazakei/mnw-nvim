@@ -8,7 +8,7 @@ return {
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
-				theme = "moonfly",
+				theme = "rose-pine-moon",
 				component_separators = { "", "" },
 
 				section_separators = { left = "", right = "" },

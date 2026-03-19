@@ -1,34 +1,33 @@
---@type vim.lsp.Config
-
+---@type vim.lsp.Config
 return {
-	on_init = function(client)
-		if client.workspace_folders then
-			local path = client.workspace_folders[1].name
-			if vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc") then
-				return
-			end
-		end
+  settings = {
+    Lua = {
+      semantic = {
+        enable = false,
+      },
+      hint = {
+        enable = true,
+        paramName = "Literal",
+        arrayIndex = "Disable",
+      },
 
-		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-			format = {
-				enable = true,
-			},
-			runtime = {
-				version = "LuaJIT",
-			},
-			telemetry = { enable = false },
-			workspace = {
-				checkThirdParty = false,
-			},
-			completion = {
-				callSnippet = "Replace",
-			},
-			diagnostics = {
-				disable = { "missing-fields" },
-			},
-		})
-	end,
-	settings = {
-		Lua = {},
-	},
+      -- Note that lazydev doesn't follow this by default - I point to a fork.
+      -- See https://github.com/folke/lazydev.nvim/pull/113
+      workspace = {
+        ignoreDir = {
+          ".direnv",
+        },
+      },
+
+      diagnostics = {
+        -- Yazi and Neovim globals, for before lazydev loads in
+        globals = { "vim", "require", "ya", "cx", "Command" },
+
+        disable = { "missing-fields", "lowercase-global" },
+      },
+    },
+  },
+  on_attach = function()
+    vim.lsp.document_color.enable(false)
+  end,
 }

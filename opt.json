@@ -13,6 +13,19 @@
       "url": "https://github.com/numToStr/Comment.nvim/archive/e30b7f2008e52442154b66f7c519bfd2f1e32acb.tar.gz",
       "hash": "sha256-h0kPue5Eqd5aeu4VoLH45pF0DmWWo1d8SnLICSQ63zc="
     },
+    "LuaSnip": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "L3MON4D3",
+        "repo": "LuaSnip"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "dae4f5aaa3574bd0c2b9dd20fb9542a02c10471c",
+      "url": "https://github.com/L3MON4D3/LuaSnip/archive/dae4f5aaa3574bd0c2b9dd20fb9542a02c10471c.tar.gz",
+      "hash": "sha256-3beTsZPT2EwzAVhEzqNhFRnDAU7C7GlzFFymY3aNp9M="
+    },
     "bufdelete.nvim": {
       "type": "Git",
       "repository": {
@@ -270,6 +283,19 @@
       "url": "https://github.com/MunifTanjim/nui.nvim/archive/de740991c12411b663994b2860f1a4fd0937c130.tar.gz",
       "hash": "sha256-41slmnvt1z7sCxvpiVuFmQ9g7eCaxQi1dDCL3AxSL1A="
     },
+    "nvim-autopairs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "windwp",
+        "repo": "nvim-autopairs"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "59bce2eef357189c3305e25bc6dd2d138c1683f5",
+      "url": "https://github.com/windwp/nvim-autopairs/archive/59bce2eef357189c3305e25bc6dd2d138c1683f5.tar.gz",
+      "hash": "sha256-0IqXpxKCzqVz6i9QajPYJ0FdfReHQBhehrvN89/8n6U="
+    },
     "nvim-colorizer.lua": {
       "type": "Git",
       "repository": {
@@ -308,6 +334,38 @@
       "revision": "8701bece920b38ea289b457f902e2ad184131a5d",
       "url": "https://github.com/rcarriga/nvim-notify/archive/8701bece920b38ea289b457f902e2ad184131a5d.tar.gz",
       "hash": "sha256-h7STMjY+CBTqBkIDJXgtJz4WhNeQ02ES2Jesi3jZXeM="
+    },
+    "nvim-treesitter": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "submodules": false,
+      "version": "v0.10.0",
+      "revision": "42fc28ba918343ebfd5565147a42a26580579482",
+      "url": "https://api.github.com/repos/nvim-treesitter/nvim-treesitter/tarball/refs/tags/v0.10.0",
+      "hash": "sha256-CVs9FTdg3oKtRjz2YqwkMr0W5qYLGfVyxyhE3qnGYbI="
+    },
+    "nvim-treesitter-context": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter-context"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "submodules": false,
+      "version": "v1.0.0",
+      "revision": "ed1cf48d5af252248c55f50b9427e8ce883a2c6b",
+      "url": "https://api.github.com/repos/nvim-treesitter/nvim-treesitter-context/tarball/refs/tags/v1.0.0",
+      "hash": "sha256-f+0DMYzLlciwpEsq91htyZuk/6orvygeu7laBNEXX/g="
     },
     "nvim-ts-context-commentstring": {
       "type": "Git",

@@ -51,7 +51,7 @@ mnw.lib.wrap pkgs {
 
     optAttrs = mnw.lib.npinsToPluginsAttrs pkgs ./opt.json;
 
-    dev.config = {
+    dev.gerg = {
       pure =
         let
           fs = pkgs.lib.fileset;

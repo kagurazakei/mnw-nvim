@@ -1,49 +1,108 @@
---vim herasy
-vim.opt.encoding = "utf-8"
+-- Improves startup time
+-- We do it before everything so it can help us the most
+vim.loader.enable()
+
+local g = vim.g
+local o = vim.o
+
+o.backup = false
+o.writebackup = false
+o.undofile = true -- Persistent undo
+
+g.mapleader = " "
+
 vim.opt.mouse = "a"
-vim.cmd.aunmenu({ "PopUp.How-to\\ disable\\ mouse" })
-vim.cmd.aunmenu({ "PopUp.-1-" })
+o.clipboard = "unnamedplus"
 
---indenting
+vim.opt.matchpairs:append("<:>") -- % goes between <>
 
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.softtabstop = 2
-vim.opt.expandtab = true
-vim.opt.smartindent = true
+-- Some people swear by it, but I want closing tabs to actually close them
+o.hidden = false
 
-vim.opt.cmdheight = 1
-vim.opt.updatetime = 50
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.signcolumn = "yes:2"
-vim.opt.ai = true
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.writebackup = false
-vim.opt.visualbell = false
-vim.opt.errorbells = false
+-- Timeout isn't intuitive.
+o.timeout = false
 
-vim.opt.number = true
-vim.opt.relativenumber = true
+-- When jumping around, don't center the line, so the screen position doesn't
+-- change.
+o.jumpoptions = "stack,view"
 
-vim.opt.clipboard = "unnamedplus"
+-- Project-specific marks through shada file, from:
+-- https://www.reddit.com/r/neovim/comments/1gv3uqk/comment/lxzi96y/
+--
+-- We use a custom function from the Cwd namespace that ignores subdirs of git
+-- repos, so `nvim myrepo` will give the same result as `nvim myrepo/foo/bar`
+-- Only activate in git repos, to save on startuptime elsewhere
+local workspace_path = vim.g.repo_root
+if workspace_path ~= nil then
+	local cache_dir = vim.fn.stdpath("data")
+	local unique_id = vim.fn.fnamemodify(workspace_path, ":t") .. "_" .. vim.fn.sha256(workspace_path):sub(1, 8)
+	local shadafile = cache_dir .. "/myshada/" .. unique_id .. ".shada"
+	o.shadafile = shadafile
+	o.shada = "'50,<0"
+end
 
-vim.opt.wrap = false
+require("vim._core.ui2").enable({})
 
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
+o.winborder = "rounded"
+o.termguicolors = true
 
-vim.opt.spell = true
-vim.opt.spelllang = "en_us"
+o.cursorline = true
+o.cursorlineopt = "both" -- Highlights the line number of the cursorline
 
-vim.opt.scrolloff = 10
-vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25"
-vim.g.cursorline_timeout = 0
+o.number = true
+o.relativenumber = true
+o.signcolumn = "yes"
 
-vim.opt.shortmess:append({ I = true, c = true })
+-- Shows a continuation `>>>` when wrapping line is cut off
+o.smoothscroll = true
 
-vim.opt.exrc = true
+-- Custom window title, showing project cwd and current filename. Regex takes
+-- the full cwd and takes everything after the last slash.
+o.title = true
+o.titlestring = vim.fn.getcwd():match("([^/]+)$") .. ": %t"
+
+o.expandtab = true -- spaces as tab
+o.tabstop = 2 -- 2 spaces for tabs
+o.shiftwidth = 0 -- Reuse value of tabstop
+
+-- If you need it, do `zi`
+o.foldenable = false
+o.foldmethod = "indent"
+
+-- Round to the nearest indentation level when using `<` and `>`
+o.shiftround = true
+
+o.breakindent = true -- Continue indented wrapped line at same level
+
+-- we don't turn on smartindent or cindent, and instead rely on filetype
+-- indentation
+o.autoindent = true
+
+o.wrap = false
+
+o.ignorecase = true
+o.smartcase = true
+o.hlsearch = true -- Highlight search matches
+
+o.showmode = false -- Using lualine
+o.showcmd = true
+
+-- Only one statusline, for better separator between horizontal splits
+o.laststatus = 3
+
+-- Keep my eyes in the right place!
+o.splitbelow = true
+o.splitright = true
+
+-- Changes from defaults:
+-- 1. Removed `t` - only comments should be autoformatted. We add it back in the
+-- ftplugins of languages like markdown
+-- 2. Added `r`, so comment headers get continued, but only in insert mode.
+o.formatoptions = "cjqr"
+
+-- Auto-wrap comments (but not other stuff, thanks to not having `t` in
+-- formatoptions by default)
+o.textwidth = 80
 
 WK = require("which-key")
 WK.setup({
@@ -52,26 +111,27 @@ WK.setup({
 	},
 })
 WK.add({ " ", "<Nop>", { silent = true, remap = false } })
-vim.g.mapleader = " "
-
---theming
-vim.opt.termguicolors = true
--- use single border for windows
-vim.opt.winborder = "single"
-
-vim.g.moonflyCursorColor = true
-vim.g.moonflyNormalFloat = true
-vim.g.moonflyTerminalColors = true
-vim.g.moonflyTransparent = true
-vim.g.moonflyUndercurls = false
-vim.g.moonflyUnderlineMatchParen = true
-vim.g.moonflyVirtualTextColor = true
-
--- stop hiding double quotes in json files
-vim.g.indentLine_setConceal = 0
 
 WK.add({
 	{ "Q", "<Nop>", { noremap = false } },
+})
+-- keymaps
+WK.add({
+	{
+		mode = { "v" },
+		{ "J", ":m '>+1<CR>gv=gv" },
+		{ "K", ":m '<-2<CR>gv=gv" },
+	},
+	{
+		{ "C-d>", "<C-d>zz" },
+		{ "C-u>", "<C-u>zz" },
+		{ "n", "nzzzv" },
+		{ "N", "Nzzzv" },
+	},
+	{
+		mode = { "x" },
+		{ "<leader>p", '"_dP' },
+	},
 })
 
 -- automatically create directories on save if they don't exist

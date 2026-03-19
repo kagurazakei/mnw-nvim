@@ -88,7 +88,7 @@
 
           dev = self.packages.${system}.default.devMode;
           inherit (self.packages.${system}.default) configDir;
-
+          blink-cmp = pkgs.vimPlugins.blink-cmp-nixpkgs-maintainers;
           neovim = mnw.lib.wrap { inherit pkgs inputs; } ./config.nix;
         }
       );

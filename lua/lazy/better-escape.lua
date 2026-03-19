@@ -1,4 +1,5 @@
 return {
+
 	{
 		"better-escape.nvim",
 		event = "InsertEnter",
